@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mali Pesa - Tokenization ya Hisa za NSE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2D3748;
+            --secondary-color: #4A5568;
+            --accent-color: #4299E1;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --background-color: #F7FAFC;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1rem;
+        }
+
+        .stock-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stock-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .stock-change {
+            font-size: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .stock-change.positive {
+            background-color: rgba(72, 187, 120, 0.1);
+            color: var(--success-color);
+        }
+
+        .stock-change.negative {
+            background-color: rgba(245, 101, 101, 0.1);
+            color: var(--danger-color);
+        }
+
+        .news-item {
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .news-item:hover {
+            background: #F8FAFC;
+        }
+
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            max-width: 80%;
+        }
+
+        .chat-message.user {
+            background: var(--accent-color);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-message.bot {
+            background: #EDF2F7;
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #3182CE;
+            transform: translateY(-2px);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #E2E8F0;
+            padding: 0.75rem 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+
+        .portfolio-table th {
+            background: #F8FAFC;
+            font-weight: 600;
+        }
+
+        .portfolio-table td {
+            vertical-align: middle;
+        }
+
+        .transfer-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .transfer-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .transfer-item:last-child {
+            border-bottom: none;
+        }
+
+        .mpesa-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .mpesa-form .form-label {
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .mpesa-form .form-select {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .mpesa-form .btn-success {
+            background: var(--success-color);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .mpesa-form .btn-success:hover {
+            background: #38A169;
+        }
+
+        .market-overview {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .market-overview .index-card {
+            background: #F8FAFC;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .market-overview .index-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .market-overview .index-change {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .market-overview .index-change.positive {
+            background: rgba(72, 187, 120, 0.1);
+            color: var(--success-color);
+        }
+
+        .market-overview .index-change.negative {
+            background: rgba(245, 101, 101, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Typing indicator for chat */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            column-gap: 6px;
+            padding: 5px 0;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: block;
+            opacity: 0.4;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes typing {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        /* Quick question buttons styling */
+        .quick-question {
+            transition: all 0.2s;
+        }
+
+        .quick-question:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-graph-up me-2"></i>
+                Mali Pesa
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#market">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#transfers">Transfers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#advisor">AI Advisor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#advanced-features">
+                            <i class="bi bi-stars me-1"></i>Advanced Features
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="fw-bold mb-3">Welcome to Mali Pesa</h2>
+                                <p class="fs-5 mb-3">The future of stock trading on the Nairobi Securities Exchange through blockchain technology.</p>
+                                <p class="mb-4">Mali Pesa revolutionizes how you invest in NSE stocks by offering traditional stock trading with the option to tokenize your shares on the Hedera network for enhanced liquidity, reduced costs, and global access.</p>
+                                <div class="d-flex gap-3">
+                                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#infoModal">
+                                        <i class="bi bi-info-circle me-2"></i>Learn More
+                                    </button>
+                                    <button class="btn btn-outline-light" onclick="document.getElementById('chatContainer').scrollIntoView({behavior: 'smooth'});">
+                                        <i class="bi bi-robot me-2"></i>Ask AI Advisor
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-none d-md-block text-center">
+                                <i class="bi bi-currency-exchange" style="font-size: 8rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Information Card -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0 d-flex align-items-center">
+                                <i class="bi bi-person-circle me-2"></i>
+                                <span id="userName">Account Owner</span>
+                            </h4>
+                            <div class="text-muted">
+                                Account: <span class="account-id">0.0.0000</span> | 
+                                <span class="user-type">Investor</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h5>Portfolio Value</h5>
+                            <h3 class="portfolio-value">KES 0.00</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Portfolio Section -->
+            <div class="col-md-8 mb-4">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+                        <h5 class="mb-0">Your Portfolio</h5>
+                        <span class="badge bg-light text-primary portfolio-value">KES 0.00</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="portfolioTable">
+                                <thead>
+                                    <tr>
+                                        <th>Symbol</th>
+                                        <th>Name</th>
+                                        <th>Shares</th>
+                                        <th>Avg Price</th>
+                                        <th>Current Price</th>
+                                        <th>Change</th>
+                                        <th>Value</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Portfolio data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Tokenized Stocks Section -->
+                        <div id="tokenizedStocksSection" class="mt-4 d-none">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-currency-bitcoin text-primary me-2"></i>
+                                    Tokenized Stocks
+                                </h5>
+                                <span class="badge bg-primary">Powered by Hedera</span>
+                            </div>
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                <div>
+                                    <strong>Tokenized stocks</strong> are your NSE shares converted to digital tokens on the Hedera blockchain.
+                                    They offer faster transfers, lower fees, and global trading access while maintaining the same underlying value.
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#infoModal" class="alert-link">Learn more</a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover" id="tokenizedStocksTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Symbol</th>
+                                            <th>Name</th>
+                                            <th>Tokens</th>
+                                            <th>Price</th>
+                                            <th>Value</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Tokenized stocks will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center mt-3 d-none" id="noTokensMessage">
+                                <div class="p-4 border rounded bg-light">
+                                    <i class="bi bi-currency-exchange text-muted" style="font-size: 3rem;"></i>
+                                    <h5 class="mt-3">No Tokenized Stocks Yet</h5>
+                                    <p class="text-muted">You haven't tokenized any of your stocks yet. Click "Tokenize" on any stock to convert it to a digital token on the Hedera network.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Overview -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Market Overview</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="market-overview">
+                            <div class="index-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">NSE 20</h6>
+                                        <div class="index-value">1,800.25</div>
+                                    </div>
+                                    <div class="index-change positive">+1.2%</div>
+                                </div>
+                            </div>
+                            <div class="index-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">NSE All Share</h6>
+                                        <div class="index-value">145.85</div>
+                                    </div>
+                                    <div class="index-change positive">+0.8%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Market News -->
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Real-Time Market News</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="marketNews">
+                            <!-- News items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- M-Pesa Integration -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Buy Tokens with M-Pesa</h5>
+                    </div>
+                    <div class="card-body">
+                        <form class="mpesa-form" onsubmit="event.preventDefault(); simulateMPesaPayment();">
+                            <div class="mb-3">
+                                <label class="form-label">Select Stock</label>
+                                <select class="form-select" id="stockSelect">
+                                    <option value="">Choose a stock...</option>
+                                    <option value="SCOM">SCOM - Safaricom PLC</option>
+                                    <option value="EQTY">EQTY - Equity Group Holdings</option>
+                                    <option value="KCB">KCB - KCB Group PLC</option>
+                                    <option value="COOP">COOP - Co-operative Bank</option>
+                                    <option value="EABL">EABL - East African Breweries</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Number of Tokens</label>
+                                <input type="number" class="form-control" id="tokenAmount" min="1" value="1">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">M-Pesa Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+254</span>
+                                    <input type="tel" class="form-control" id="phoneNumber" placeholder="7XXXXXXXX">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-phone me-2"></i>Pay with M-Pesa
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Transfer History -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Transfer History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Token</th>
+                                        <th>Amount</th>
+                                        <th>Value</th>
+                                        <th>Transaction ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transferHistory">
+                                    <!-- Transfer history will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Advisor Chat -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">AI Investment Advisor</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chat-container" id="chatContainer">
+                            <!-- Chat messages will be loaded here -->
+                        </div>
+                        <form id="chatForm" class="mt-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="userInput" placeholder="Ask about your investments...">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-send"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tokenization Benefits -->
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Faida za Tokenization ya Hisa</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="benefit-item">
+                                <h6><i class="bi bi-lightning-charge text-primary me-2"></i>Ufanisi wa Biashara</h6>
+                                <p>Uwezo wa kununua na kuuza hisa kwa haraka na gharama nafuu kupitia blockchain.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="benefit-item">
+                                <h6><i class="bi bi-shield-check text-success me-2"></i>Usalama</h6>
+                                <p>Usalama wa juu wa malipo na uhakika wa miliki kupitia teknolojia ya blockchain.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="benefit-item">
+                                <h6><i class="bi bi-globe text-info me-2"></i>Ufikiaji wa Kimataifa</h6>
+                                <p>Uwezo wa kufanya biashara na wafanyabiashara kutoka nchi zote duniani.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Tokenization ni hiari. Unaweza kuchagua kununua hisa kawaida au hisa zilizotokenized.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Hedera Features -->
+        <div class="row mt-5" id="advanced-features">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0 d-flex align-items-center">
+                            <i class="bi bi-stars me-2"></i>
+                            Advanced Hedera Features
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="advanced-features-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="swap-tab" data-bs-toggle="tab" data-bs-target="#swap-pane" type="button" role="tab" aria-controls="swap-pane" aria-selected="true">
+                                    <i class="bi bi-arrow-left-right me-2"></i>Token Swap
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="staking-tab" data-bs-toggle="tab" data-bs-target="#staking-pane" type="button" role="tab" aria-controls="staking-pane" aria-selected="false">
+                                    <i class="bi bi-graph-up-arrow me-2"></i>Staking
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="marketplace-tab" data-bs-toggle="tab" data-bs-target="#marketplace-pane" type="button" role="tab" aria-controls="marketplace-pane" aria-selected="false">
+                                    <i class="bi bi-shop me-2"></i>Marketplace
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content p-3" id="advanced-features-content">
+                            <!-- Token Swap Tab -->
+                            <div class="tab-pane fade show active" id="swap-pane" role="tabpanel" aria-labelledby="swap-tab">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <h4>Token Swapping</h4>
+                                        <p>With Hedera's powerful token service, you can easily swap between different tokenized assets with minimal fees and near-instant settlement.</p>
+                                        <h5 class="mt-4">Benefits of Token Swapping</h5>
+                                        <ul>
+                                            <li>Instant liquidity for your tokenized stocks</li>
+                                            <li>Low transaction fees thanks to Hedera's efficiency</li>
+                                            <li>Execute trades 24/7, unlike traditional markets</li>
+                                            <li>Diversify your portfolio with ease</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">Swap Tokens</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <form id="swapForm">
+                                                    <div class="mb-3">
+                                                        <label for="fromToken" class="form-label">From Token</label>
+                                                        <select class="form-select" id="fromToken" required>
+                                                            <option value="HBAR">HBAR (Hedera)</option>
+                                                            <option value="SAFCOM">SAFCOM (Safaricom)</option>
+                                                            <option value="KCB">KCB (Kenya Commercial Bank)</option>
+                                                            <option value="EQTY">EQTY (Equity Bank)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="fromAmount" class="form-label">Amount</label>
+                                                        <input type="number" class="form-control" id="fromAmount" min="0.000001" step="0.000001" required>
+                                                    </div>
+                                                    <div class="text-center mb-3">
+                                                        <i class="bi bi-arrow-down-up fs-2"></i>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="toToken" class="form-label">To Token</label>
+                                                        <select class="form-select" id="toToken" required>
+                                                            <option value="SAFCOM">SAFCOM (Safaricom)</option>
+                                                            <option value="HBAR">HBAR (Hedera)</option>
+                                                            <option value="KCB">KCB (Kenya Commercial Bank)</option>
+                                                            <option value="EQTY">EQTY (Equity Bank)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="toAmount" class="form-label">Amount to Receive</label>
+                                                        <input type="number" class="form-control" id="toAmount" readonly>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div>Exchange Rate: <span id="exchangeRate">1 HBAR = 0.5 SAFCOM</span></div>
+                                                            <div>Network Fee: <span id="networkFee">0.001 HBAR</span></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-grid">
+                                                        <button type="submit" class="btn btn-primary" id="executeSwap">Execute Swap</button>
+                                                    </div>
+                                                </form>
+                                                <div id="swapMessage" class="alert mt-3" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Staking Tab -->
+                            <div class="tab-pane fade" id="staking-pane" role="tabpanel" aria-labelledby="staking-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card mb-4">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">Stake Your Tokenized Assets</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-3">
+                                                    Earn passive income by staking your tokenized stocks. Choose from different
+                                                    staking pools with various lock periods and APY rates.
+                                                </p>
+                                                <form id="stakingForm">
+                                                    <div class="mb-3">
+                                                        <label for="stakeToken" class="form-label">Select Token to Stake</label>
+                                                        <select class="form-select" id="stakeToken" required>
+                                                            <option value="SAFCOM">SAFCOM (Safaricom)</option>
+                                                            <option value="KCB">KCB (Kenya Commercial Bank)</option>
+                                                            <option value="EQTY">EQTY (Equity Bank)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="stakeAmount" class="form-label">Amount to Stake</label>
+                                                        <input type="number" class="form-control" id="stakeAmount" min="1" step="0.01" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="stakingPool" class="form-label">Select Staking Pool</label>
+                                                        <select class="form-select" id="stakingPool" required>
+                                                            <option value="short">Short Term (7 days) - 5% APY</option>
+                                                            <option value="medium">Medium Term (30 days) - 8% APY</option>
+                                                            <option value="long">Long Term (90 days) - 12% APY</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary w-100">Stake Tokens</button>
+                                                </form>
+                                                <div id="stakingMessage" class="alert mt-3" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card mb-4">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">Your Active Stakes</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="activeStakes">
+                                                    <div class="text-center py-4">
+                                                        <p class="text-muted">You don't have any active stakes yet.</p>
+                                                        <p>Stake your tokens to start earning rewards!</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">Staking Benefits</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">
+                                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                        Earn passive income through APY rewards
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                        Higher rewards for longer staking periods
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                        Automatic reward distribution
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                        Powered by Hedera's secure consensus mechanism
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Marketplace Tab -->
+                            <div class="tab-pane fade" id="marketplace-pane" role="tabpanel" aria-labelledby="marketplace-tab">
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4>Tokenized Stock Marketplace</h4>
+                                        <p>
+                                            Buy and sell tokenized stocks directly with other users on our decentralized marketplace.
+                                            Powered by Hedera's secure and fast consensus service, transactions are final within seconds.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">Create Listing</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <form id="createListingForm">
+                                                    <div class="mb-3">
+                                                        <label for="listToken" class="form-label">Token to List</label>
+                                                        <select class="form-select" id="listToken" required>
+                                                            <option value="SAFCOM">SAFCOM (Safaricom)</option>
+                                                            <option value="KCB">KCB (Kenya Commercial Bank)</option>
+                                                            <option value="EQTY">EQTY (Equity Bank)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="listAmount" class="form-label">Amount to List</label>
+                                                        <input type="number" class="form-control" id="listAmount" min="1" step="1" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="listPrice" class="form-label">Price per Token (HBAR)</label>
+                                                        <input type="number" class="form-control" id="listPrice" min="0.000001" step="0.000001" required>
+                                                    </div>
+                                                    <div class="d-grid">
+                                                        <button type="submit" class="btn btn-primary">Create Listing</button>
+                                                    </div>
+                                                </form>
+                                                <div id="listingMessage" class="alert mt-3" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                                <h5 class="mb-0">Available Listings</h5>
+                                                <button class="btn btn-sm btn-outline-primary" id="refreshListings">
+                                                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                                                </button>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="marketplaceListings">
+                                                    <div class="text-center my-4">
+                                                        <div class="spinner-border text-primary" role="status"></div>
+                                                        <p class="mt-2">Loading listings...</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script type="module" src="app.js"></script>
+    <!-- Advanced Hedera Features -->
+    <script src="advanced-features.js"></script>
+
+    <!-- Add an Alert Container for notifications -->
+    <div class="alert-container position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+
+    <!-- Action Modal for Tokenization, Buy, Sell, Transfer -->
+    <div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <!-- Dynamic buttons will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-info-circle me-2"></i>
+                        About Mali Pesa
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4>What is Mali Pesa?</h4>
+                            <p>Mali Pesa is an innovative trading platform that combines traditional NSE stock trading with blockchain tokenization through the Hedera network. "Mali" means "wealth" in Swahili, reflecting our mission to help Kenyans build wealth through modern investment technology.</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4>Key Features</h4>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center">
+                                        <i class="bi bi-currency-bitcoin text-primary me-2"></i>
+                                        Stock Tokenization
+                                    </h5>
+                                    <p>Convert your traditional NSE stocks into digital tokens on the Hedera blockchain. Tokenized stocks retain their value while gaining the benefits of blockchain technology.</p>
+                                    <div class="alert alert-info">
+                                        <strong>How to tokenize:</strong> Select any stock in your portfolio and click the "Tokenize" button. You choose how many shares to convert to tokens.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center">
+                                        <i class="bi bi-arrow-left-right text-success me-2"></i>
+                                        Token Transfers
+                                    </h5>
+                                    <p>Transfer your tokenized stocks instantly to any user with a Hedera account. Transactions are secure, fast, and have minimal fees compared to traditional stock transfers.</p>
+                                    <div class="alert alert-info">
+                                        <strong>How to transfer:</strong> Click "Transfer Tokens" on any tokenized stock in your portfolio, or use the AI advisor by typing a message like "Transfer 10 SCOM-T tokens to Bob".
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center">
+                                        <i class="bi bi-robot text-primary me-2"></i>
+                                        AI Investment Advisor
+                                    </h5>
+                                    <p>Our AI advisor provides personalized guidance on your portfolio, answers questions about tokenization, and helps execute transactions through natural language.</p>
+                                    <div class="alert alert-info">
+                                        <strong>Sample questions:</strong>
+                                        <ul class="mb-0">
+                                            <li>"What are the benefits of tokenized stocks?"</li>
+                                            <li>"How is my portfolio performing?"</li>
+                                            <li>"Transfer 5 KCB-T tokens to Charlie"</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center">
+                                        <i class="bi bi-graph-up text-danger me-2"></i>
+                                        Real-Time Market Data
+                                    </h5>
+                                    <p>Access current market news and stock information to make informed investment decisions. Stay updated on the latest market trends affecting your portfolio.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Understanding Tokenization</h4>
+                            <p>Tokenization converts traditional assets into digital tokens on a blockchain. With Mali Pesa, your NSE shares can be tokenized on the Hedera network, providing several advantages:</p>
+                            
+                            <div class="row text-center mt-4">
+                                <div class="col-md-4 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <i class="bi bi-lightning-charge text-primary fs-1"></i>
+                                        <h5 class="mt-2">Faster Transfers</h5>
+                                        <p class="small">Instant settlements vs. traditional T+3 days</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <i class="bi bi-cash-coin text-success fs-1"></i>
+                                        <h5 class="mt-2">Lower Costs</h5>
+                                        <p class="small">Reduced fees and no intermediaries</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <i class="bi bi-globe text-info fs-1"></i>
+                                        <h5 class="mt-2">Global Access</h5>
+                                        <p class="small">Trade with investors worldwide 24/7</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('chatContainer').scrollIntoView({behavior: 'smooth'}); $('#infoModal').modal('hide');">
+                        <i class="bi bi-chat-dots me-2"></i>Ask the AI Advisor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
