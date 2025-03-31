@@ -24,6 +24,19 @@ Mali Pesa is an innovative trading platform that combines traditional NSE (Nairo
   - Hedera Consensus Service (HCS)
   - Hedera Smart Contract Service
 - **AI**: OpenAI API for the investment advisor
+- **Hedera AI Agent Kit**: Intelligent agent framework for automation and enhanced user interactions
+
+## AI Agent Integration
+
+Mali Pesa leverages the Hedera AI Agent Kit to provide intelligent interactions and automation:
+
+- **Natural Language Processing**: Understand and respond to user queries about investments, tokenization, and transactions
+- **Autonomous Transactions**: Execute token transfers, swaps, and other operations through conversational commands
+- **Portfolio Analysis**: Analyze user portfolios and provide personalized investment recommendations
+- **Market Intelligence**: Monitor market trends and news to offer timely insights
+- **Learning Capabilities**: Adapt to user preferences and improve recommendations over time
+
+The AI agent serves as a bridge between traditional financial services and blockchain technology, making complex operations accessible through simple conversation.
 
 ## Getting Started
 
